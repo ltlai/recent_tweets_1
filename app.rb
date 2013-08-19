@@ -5,17 +5,13 @@ class Dweet < Sinatra::Base
   end
 
   get '/:username' do
-    @user = TwitterUser.find_by_username(params[:username])
+    @user = TwitterUser.find_or_create_by_username(params[:username])
     if @user.tweets_stale?
-      # User#fetch_tweets! should make an API call
-      # and populate the tweets table
-      #
-      # Future requests should read from the tweets table 
-      # instead of making an API call
       @user.fetch_tweets!
     end
 
-    @user.tweets.limit(10)
+    @tweets = @user.tweets.limit(10).map {|tweet| tweet.body}
+    erb :index
   end
 
 end
@@ -29,7 +25,13 @@ class TwitterUser < ActiveRecord::Base
   has_many :tweets
 
   def fetch_tweets!
-    Client.user_timeline(self.username)
+    Client.user_timeline(self.username).each do |tweet|
+      self.tweets.create(:body => tweet.text)
+    end
+  end
+
+  def tweets_stale?
+    self.tweets.empty? ? true : (self.tweets.last.created_at - Chronic.parse('60 minutes ago')) <= 0
   end
 
 end
