@@ -1,4 +1,4 @@
 require 'rubygems'
-require './environment'
+require './config/environment'
  
-run Sinatra::Application
+run Dweet #Sinatra::Application
