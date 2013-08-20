@@ -1,17 +1,25 @@
 class Dweet < Sinatra::Base
 
   get '/' do
-
+    erb :index
   end
 
   get '/:username' do
-    @user = TwitterUser.find_or_create_by_username(params[:username])
-    if @user.tweets_stale?
-      @user.fetch_tweets!
-    end
-
-    @tweets = @user.tweets.limit(10).map {|tweet| tweet.body}
     erb :index
+  end
+
+  post '/check' do
+    @user = TwitterUser.find_or_create_by(username: params[:username])
+    puts ' - '*50
+    puts @user.tweets_stale?.to_s
+    @user.tweets_stale?.to_s
+  end
+
+  post '/fetch' do
+     @user = TwitterUser.find_or_create_by(username: params[:username])
+     @user.fetch_tweets!
+     @tweets = @user.tweets.limit(10).map {|tweet| tweet.body}
+     erb :tweet_index
   end
 
 end

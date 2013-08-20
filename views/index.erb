@@ -1,12 +1,15 @@
 <html>
   <head>
     <title>TweetTastic</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="application.js"></script>
   </head>
   <body>
-    <div class="container">
-      <% @tweets.each do |t| %>
-        <h3><%= t %></h3>
-      <% end %>
+    <div id="container">
+      <p>Put a twitter user in the URL.</p>
+    </div>
+    <div id="loader" style="display: none;">
+      <img src="loader.gif" />
     </div>
   </body>
 </html>
