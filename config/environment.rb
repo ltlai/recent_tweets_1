@@ -4,6 +4,7 @@ require 'pg'
 require 'active_record'
 require 'erb'
 require 'chronic'
+require 'pathname'
 
 APP_ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 APP_NAME = APP_ROOT.basename.to_s

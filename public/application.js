@@ -16,11 +16,28 @@ $(document).ready(function() {
       }
       else
       {
-        console.log('these are freeessh tweets')
         $.post('/fetch', params, function(tweets) {
           $('#container').html(tweets);
         });
       }
+  });
+
+  $('#tweet_form').submit(function(e) {
+    e.preventDefault();
+    $('.input-field').prop('readonly', true);
+    $('.message').html('Processing tweet...');
+
+    var tweetText = $(this).serialize();
+
+    $.ajax({
+      type: this.method,
+      url: this.action,
+      data: tweetText
+    }).done(function(response) {
+      console.log(response);
+      $('.message').html(response);
+    });
+
   });
 
 })

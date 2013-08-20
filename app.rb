@@ -1,7 +1,12 @@
 class Dweet < Sinatra::Base
 
   get '/' do
-    erb :index
+    erb :tweet
+  end
+
+  post '/tweet' do
+    Client.update(params[:tweet_text])
+    "Tweet submitted"
   end
 
   get '/:username' do
@@ -10,8 +15,6 @@ class Dweet < Sinatra::Base
 
   post '/check' do
     @user = TwitterUser.find_or_create_by(username: params[:username])
-    puts ' - '*50
-    puts @user.tweets_stale?.to_s
     @user.tweets_stale?.to_s
   end
 
